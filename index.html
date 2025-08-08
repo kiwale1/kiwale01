@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+        <!-- Favicons -->
+  <link href="it.png" rel="icon">
+  <link href="it.png" rel="apple-touch-icon">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+
+
+    <title>Richie</title>
+    <style>
+        /* CSS Variables */
+        :root {
+            --font-size: 14px;
+            --background: #ffffff;
+            --foreground: #2d2d2d;
+            --card: #ffffff;
+            --card-foreground: #2d2d2d;
+            --primary: #030213;
+            --primary-foreground: #ffffff;
+            --secondary: #f4f4f5;
+            --secondary-foreground: #030213;
+            --muted: #ececf0;
+            --muted-foreground: #717182;
+            --accent: #e9ebef;
+            --accent-foreground: #030213;
+            --border: rgba(0, 0, 0, 0.1);
+            --radius: 0.625rem;
+        }
+
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: var(--font-size);
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        p {
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        /* Layout Utilities */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1rem;
+        }
+
+        .section {
+            padding: 2rem 2rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .grid-cols-1 {
+            grid-template-columns: 1fr;
+        }
+
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid-cols-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .space-x-4 > * + * {
+            margin-left: 1rem;
+        }
+
+        .space-y-4 > * + * {
+            margin-top: 1rem;
+        }
+
+        .space-y-6 > * + * {
+            margin-top: 1.5rem;
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+
+        .mb-8 {
+            margin-bottom: 2rem;
+        }
+
+        .mb-16 {
+            margin-bottom: 4rem;
+        }
+
+        .mt-16 {
+            margin-top: 4rem;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-family: "Audiowide", sans-serif;
+            font-weight: 400;
+            font-style:italic;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: none;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links.active {
+            display: flex;
+        }
+
+        .nav-link {
+            color: var(--foreground);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .mobile-menu-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--foreground);
+        }
+
+        .mobile-nav {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--background);
+            border-top: 1px solid var(--border);
+            padding: 1rem;
+        }
+
+        .mobile-nav.active {
+            display: block;
+        }
+
+        .mobile-nav-link {
+            display: block;
+            color: var(--foreground);
+            text-decoration: none;
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-link:hover {
+            background-color: var(--accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-avatar {
+            width: 8rem;
+            height: 8rem;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary)cc);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-foreground);
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary)aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--muted-foreground);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-description {
+            font-size: 1.125rem;
+            color: var(--muted-foreground);
+            max-width: 42rem;
+            margin: 0 auto 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-social {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .social-link {
+            color: var(--muted-foreground);
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: var(--foreground);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary)dd;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--foreground);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--accent);
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: var(--muted-foreground);
+            margin-bottom: 1rem;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            margin: 0.25rem;
+        }
+
+        .badge-outline {
+            background-color: transparent;
+            border: 1px solid var(--border);
+        }
+
+        /* Skills Section */
+        .skills-bg {
+            background-color: var(--accent);
+        }
+
+        .skill-icon {
+            width: 3rem;
+            height: 3rem;
+            background-color: rgba(3, 2, 19, 0.1);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background-color: var(--background);
+            font-size: 1rem;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background-color: var(--background);
+            font-size: 1rem;
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Contact Info */
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .contact-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: rgba(3, 2, 19, 0.1);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .contact-info h4 {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-info a {
+            color: var(--muted-foreground);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-info a:hover {
+            color: var(--foreground);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--accent);
+            border-top: 1px solid var(--border);
+            padding: 2rem 1rem;
+            text-align: center;
+            color: var(--muted-foreground);
+        }
+
+        /* Responsive Design */
+        @media (min-width: 640px) {
+            .hero-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .grid-sm-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 4rem;
+            }
+
+            .grid-md-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid-md-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .grid-lg-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Utilities */
+        .max-w-4xl {
+            max-width: 56rem;
+        }
+
+        .max-w-2xl {
+            max-width: 42rem;
+        }
+
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .text-muted {
+            color: var(--muted-foreground);
+        }
+
+        .text-lg {
+            font-size: 1.125rem;
+        }
+
+        .text-xl {
+            font-size: 1.25rem;
+        }
+
+        .gap-2 {
+            gap: 0.5rem;
+        }
+
+        .gap-4 {
+            gap: 1rem;
+        }
+
+        .gap-6 {
+            gap: 1.5rem;
+        }
+
+        .gap-8 {
+            gap: 2rem;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .social-icons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        padding: 10px;
+        }
+
+        .icon-link img {
+        width: 40px;
+        height: 40px;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .icon-link:hover img {
+        transform: scale(1.2);
+        opacity: 0.8;
+        }
+
+        @media (max-width: 600px) {
+        .icon-link img {
+            width: 30px;
+            height: 30px;
+        }
+        }
+
+
+
+
+ .social-icons-btn {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        padding: 10px;
+        }
+
+        .icon-link img {
+        width: 20px;
+        height: 20px;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .icon-link:hover img {
+        transform: scale(1.2);
+        opacity: 0.8;
+        }
+
+        @media (max-width: 400px) {
+        .icon-link img {
+            width: 15px;
+            height: 15px;
+        }
+        }
+
+
+   .skill-icon {
+            width: 3rem;
+            height: 3rem;
+            background-color: rgba(3, 2, 19, 0.1);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+ .skill-icon img {
+        width: 25px;
+        height: 25px;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+ .skill-icon:hover img {
+        transform: scale(1.2);
+        opacity: 0.8;
+        }
+
+        @media (max-width: 400px) {
+     .skill-icon img {
+            width: 25px;
+            height: 25px;
+        }
+        }
+
+
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">richie</div>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="RICHARD KIWALE.pdf" class="nav-link">Download CV</a></li>
+            </ul>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+        </div>
+        <div class="mobile-nav" id="mobileNav">
+            <a href="#home" class="mobile-nav-link" onclick="closeMobileMenu()">Home</a>
+            <a href="#about" class="mobile-nav-link" onclick="closeMobileMenu()">About</a>
+            <a href="#projects" class="mobile-nav-link" onclick="closeMobileMenu()">Projects</a>
+            <a href="#skills" class="mobile-nav-link" onclick="closeMobileMenu()">Skills</a>
+            <a href="#contact" class="mobile-nav-link" onclick="closeMobileMenu()">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+          <div class="container">        
+                <h1 class="hero-subtitle">Hi, I'm Richard</h1>
+                <h2 class="hero-subtitle">Passionate Programmer & Web Developer</h2>
+           <p class="hero-description">
+                I'm passionate about developing dynamic, user-centered web applications powered by modern technologies. 
+                With a solid background in SQL, PHP, and Python, I specialize in crafting efficient, scalable, and data-driven digital experiences that bring ideas to life through code.
+            </p>
+        
+         
+            <div class="max-w-4xl mx-auto">
+                <h2 class="mb-8">About Me</h2>
+                <div class="text-lg text-muted space-y-6">
+                  <p>
+                        I’m a versatile IT professional with hands-on experience in both <strong>web development</strong> and <strong>technical support</strong>. I specialize in building <strong>static and dynamic websites</strong> using technologies like <strong>Django (Python), PHP, JavaScript, HTML, CSS</strong>, and frameworks such as <strong>Tailwind</strong> and <strong>Bootstrap</strong>.
+                  </p>
+                  <p>
+                        Currently, I work in an environment where I actively manage and interact with <strong>SQL databases</strong>, writing and executing queries to support data-driven applications. In addition to development, I provide day-to-day <strong>IT support</strong>, troubleshooting <strong>computer hardware, software</strong>, and <strong>network issues</strong> to ensure smooth operations for end users.
+                  </p>
+                  <p>
+                        I’m passionate about solving problems, optimizing systems, and delivering reliable digital solutions.
+                  </p>
+                  </div>
+            </div>
+            
+        </div>
+    </section>
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <div class="container">
+            <div class="text-center mb-16">
+                <h2 class="mb-4">Projects</h2>
+                <p class="text-lg text-muted max-w-2xl mx-auto">
+                    Here are some of my recent projects that showcase my skills in web development.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 grid-md-2 gap-8">
+                <div class="card">
+                    <img src="project01.png"  alt="rhodium" class="card-image"> 
+                    <h3 class="card-title">Rhodhium Personnel Management</h3>
+                    <p class="card-description">
+                     Rhodium Personnel Management is a highly acclaimed and pre-eminent recruitment and
+                      outsourcing services provider. We provide discerning human resource recruitment and 
+                      outsourcing services to corporate bodies
+                      across all sectors and setups for their human resource requirements. 
+                    </p>
+                    <div class="mb-4">
+                       <span class="badge">Html</span>
+                        <span class="badge">CSS</span>
+                        <span class="badge">JavaScript</span>
+                        <span class="badge">PHP</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <a href="https://rhodium.co.tz" target="_blank" class="btn btn-outline">Rhodium</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img src="project02.png" 
+                         alt="Task Management App" class="card-image">
+                    <h3 class="card-title">Winning Nature In Charisma</h3>
+                    <p class="card-description">
+                      Winning Nature in Charisma is a non governmental organisation for 
+                      protecting and promoting the rights and dignity of persons with disabilities in Tanzania. 
+                      Our work is focused on transforming mindsets towards disability to
+                      both persons with disabilities and persons without disabilities
+                    </p>
+                    <div class="mb-4">
+                        <span class="badge">Html</span>
+                        <span class="badge">CSS</span>
+                        <span class="badge">JavaScript</span>
+                        <span class="badge">PHP</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <a href="https://wnctanzania.org/" target="_blank" class="btn btn-outline">wnc</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section skills-bg">
+        <div class="container">
+            <div class="text-center mb-16">
+                <h2 class="mb-4">Skills & Expertise</h2>
+                <p class="text-lg text-muted max-w-2xl mx-auto">
+                    Proficient in a variety of development tools and technologies that
+                    support building scalable, responsive, and user-friendly products.
+                </p>
+
+            </div>
+            <div class="grid grid-cols-1 grid-md-2 grid-lg-3 gap-6">
+                <div class="card">
+                    <div class="skill-icon">
+                        <img src="web.png" alt="">
+                    </div>
+                    <h3 class="card-title text-center">Web Development</h3>
+                        <p class="card-description text-center">
+                             Building responsive and dynamic web applications using the latest 
+                             technologies to help sole proprietors and SMEs establish a strong digital presence.
+                        </p>
+
+                    <div class="text-center">
+                        <span class="badge badge-outline">Python</span>
+                        <span class="badge badge-outline">PHP</span>
+                        <span class="badge badge-outline">JavaScript</span>
+                        <span class="badge badge-outline">HTML5</span>
+                        <span class="badge badge-outline">CSS3</span>
+                        <span class="badge badge-outline">TailwindCSS</span>
+                        <span class="badge badge-outline">Sass</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="skill-icon">
+                        <img src="graphic.png" alt="">
+                    </div>
+                    <h3 class="card-title text-center">Graphic Design </h3>
+                    <p class="card-description text-center">
+                        Crafting high-quality poster and banner designs with a focus on aesthetics, clarity, and user engagement using advanced design tools.
+                    </p>
+                    <div class="text-center">
+                        <span class="badge badge-outline">Figma</span>
+                        <span class="badge badge-outline">Adobe Illustrator</span>
+                        <span class="badge badge-outline">Adobe XD</span>
+                        <span class="badge badge-outline">Canva</span>
+                        <span class="badge badge-outline">Photoshop</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="skill-icon">
+                        <img src="tools.png" alt="">
+                    </div>
+                    <h3 class="card-title text-center">DevOps & Tools</h3>
+                    <p class="card-description text-center">
+                        Working with the latest development tools and deployment methods to build and launch reliable web applications.
+                    </p>
+                    <div class="text-center">
+                        <span class="badge badge-outline">Git</span>
+                        <span class="badge badge-outline">GitHub</span>
+                        <span class="badge badge-outline">SQL</span>
+
+                        <!-- <span class="badge badge-outline">Docker</span>
+                        <span class="badge badge-outline">AWS</span> -->
+                        <!-- <span class="badge badge-outline">Vercel</span> -->
+                        <span class="badge badge-outline">Netlify</span>
+                        <span class="badge badge-outline">VS Code</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <!-- <section id="contact" class="section">
+        <div class="container">       
+                    <div class=" social-icons-btn ">
+                                <a href="https://github.com/kiwale1" target="_blank" class="icon-link">
+                                    <img src="GITHUB.png" alt="GitHub">
+                                </a>
+                                <a href="https://https://www.linkedin.com/in/richard-kiwale-12b869209?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" class="icon-link">
+                                    <img src="linkedin.png" alt="linkedin">
+                                </a>
+                                <a href="https://instagram.com/kiwale01" class="icon-link">
+                                    <img src="INSTA.png" alt="Email">
+                                </a>
+
+                                <a href="mailto:rich1.kiwale@gmail.com" class="icon-link">
+                               <img src="MAIL.png" alt="Email">
+                        </a>
+                    </div>
+        </div>
+    </section> -->
+    <!-- Footer -->
+    <footer>
+        <section id="contact" class="section">
+        <div class="container">
+                 <div class=" scontact-info">
+                    <div class="bg-gray-100 p-6 rounded-lg shadow-md max-w-xl mx-auto text-center">
+                    <p class="text-gray-600 mb-4">Feel free to reach out for collaborations, projects, or just to say hello!</p>
+                    <div class="space-y-3">
+                        <p><strong>Phone:</strong>+255 673 777 070</p>
+                        <p><strong>Location:</strong> Dar es Salaam, Tanzania</p>
+                    </div>
+                    </div>
+                  
+                </div>       
+                    <div class=" social-icons-btn ">
+                                <a href="https://github.com/kiwale1" target="_blank" class="icon-link">
+                                    <img src="GITHUB.png" alt="GitHub">
+                                </a>
+                                <a href="https://https://www.linkedin.com/in/richard-kiwale-12b869209?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" class="icon-link">
+                                    <img src="linkedin.png" alt="linkedin">
+                                </a>
+                                <a href="https://instagram.com/kiwale01" class="icon-link">
+                                    <img src="INSTA.png" alt="Email">
+                                </a>
+
+                                <a href="mailto:rich1.kiwale@gmail.com" class="icon-link">
+                               <img src="MAIL.png" alt="Email">
+                        </a>
+                    </div>
+        </div>
+    </section>
+    </footer>
+
+    <script>
+        // Navigation functionality
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const mobileNav = document.getElementById('mobileNav');
+            mobileNav.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const mobileNav = document.getElementById('mobileNav');
+            mobileNav.classList.remove('active');
+        }
+
+        // Form submission
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                message: formData.get('message')
+            };
+            
+            // Here you would typically send the data to a server
+            console.log('Form submitted:', data);
+            
+            // Reset form
+            event.target.reset();
+            
+            // Show success message
+            alert('Thank you for your message! I\'ll get back to you soon.');
+        }
+
+        // Event listeners
+        window.addEventListener('scroll', updateActiveNav);
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileNav = document.getElementById('mobileNav');
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (!mobileNav.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+                mobileNav.classList.remove('active');
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateActiveNav();
+        });
+    </script>
+</body>
+</html>
